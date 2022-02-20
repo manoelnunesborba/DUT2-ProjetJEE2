@@ -1,16 +1,19 @@
 package com.example.demo.services;
 
+import com.example.demo.persistance.MediathequeData;
+
 import java.io.*;
 import java.sql.*;
+import javax.inject.Inject;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 
-@WebServlet(name = "helloServlet", value = "/hello-servlet")
-public class HelloServlet extends HttpServlet {
-    private String message;
-
-    public void init() {
-        message = "Hello World!";
+@WebServlet(name = "Auth", value = "/auth")
+public class ServletAutentification extends HttpServlet {
+    private final MediathequeData MD;
+    @Inject
+    public ServletAutentification(MediathequeData md) {
+        MD = md;
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -19,7 +22,8 @@ public class HelloServlet extends HttpServlet {
         // Hello
         PrintWriter out = response.getWriter();
         out.println("<html><body>");
-        if(ExiteTil(request.getParameter("fname"),request.getParameter("fmdp") )){
+        if(MD.getUser(request.getParameter("fname"),request.getParameter("fmdp"))!=null){
+            response.sendRedirect("http://localhost:8080/demo_war/Home.jsp");
             out.println("<h1>Acceuil</h1>");
         }else{
             out.println("<h1>ERREUR</h1>");

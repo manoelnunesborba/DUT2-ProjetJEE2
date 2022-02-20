@@ -21,7 +21,7 @@
         <repository>
             <id>project.local</id>
             <name>mediatek2022</name>
-            <url>./demo/repo</url>
+            <url>./repo</url>
         </repository>
     </repositories>
     <dependencies>
@@ -49,6 +49,14 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.sample</groupId>
+            <artifactId>sample</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/repo/mediatek2022.jar</systemPath>
+        </dependency>
+
     </dependencies>
 
     <build>
