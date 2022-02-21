@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import com.example.demo.persistance.MediathequeData;
+import mediatek2022.Mediatheque;
 
 import java.io.*;
 import java.sql.*;
@@ -10,25 +11,33 @@ import javax.servlet.annotation.*;
 
 @WebServlet(name = "Auth", value = "/auth")
 public class ServletAutentification extends HttpServlet {
-    private final MediathequeData MD;
-    @Inject
-    public ServletAutentification(MediathequeData md) {
-        MD = md;
+
+    //@Inject
+    //MediathequeData MD;
+
+    Mediatheque mdt = Mediatheque.getInstance();
+
+    public ServletAutentification() {
+        try {
+            Class.forName(MediathequeData.class.getName());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("text/html");
+        // response.setContentType("text/html");
 
         // Hello
-        PrintWriter out = response.getWriter();
-        out.println("<html><body>");
-        if(MD.getUser(request.getParameter("fname"),request.getParameter("fmdp"))!=null){
-            response.sendRedirect("http://localhost:8080/demo_war/Home.jsp");
-            out.println("<h1>Acceuil</h1>");
-        }else{
-            out.println("<h1>ERREUR</h1>");
+        //PrintWriter out = response.getWriter();
+        //out.println("<html><body>");
+        // if(MD.getUser(request.getParameter("fname"),request.getParameter("fmdp"))!=null){
+        if(mdt.getUser(request.getParameter("fname"),request.getParameter("fmdp")) !=null){
+            //response.sendRedirect("http://localhost:8080/Projet_JEE_war/Home.jsp");
+            response.sendRedirect("Home.jsp");
         }
-        out.println("</body></html>");
+        //out.println("</body></html>");
     }
     public boolean ExiteTil(String ps, String mdp){
         boolean hasacc=false;

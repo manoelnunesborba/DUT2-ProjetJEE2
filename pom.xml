@@ -16,14 +16,6 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <junit.version>5.7.1</junit.version>
     </properties>
-    <repositories>
-        <!--other repositories if any-->
-        <repository>
-            <id>project.local</id>
-            <name>mediatek2022</name>
-            <url>./repo</url>
-        </repository>
-    </repositories>
     <dependencies>
         <dependency>
             <groupId>javax</groupId>
@@ -42,19 +34,18 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.28</version>
         </dependency>
-
+        <dependency>
+            <groupId>mediatek</groupId>
+            <artifactId>mediatek2022</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/mediatek2022.jar</systemPath>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.sample</groupId>
-            <artifactId>sample</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/repo/mediatek2022.jar</systemPath>
         </dependency>
 
     </dependencies>
