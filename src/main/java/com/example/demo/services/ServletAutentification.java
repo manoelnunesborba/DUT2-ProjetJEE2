@@ -2,6 +2,7 @@ package com.example.demo.services;
 
 import com.example.demo.persistance.MediathequeData;
 import mediatek2022.Mediatheque;
+import mediatek2022.Utilisateur;
 
 import java.io.*;
 import java.sql.*;
@@ -27,34 +28,17 @@ public class ServletAutentification extends HttpServlet {
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-        if(mdt.getUser(request.getParameter("fname"),request.getParameter("fmdp")) !=null){
-            response.sendRedirect("Home.jsp");
+        Utilisateur usr = mdt.getUser(request.getParameter("fname"),request.getParameter("fmdp"));
+        if( usr !=null){
+            if ((usr.isBibliothecaire())) {
+                response.sendRedirect("blibli.jsp");
+            } else {
+                response.sendRedirect("Home.jsp");
+            }
         }
         //out.println("</body></html>");
     }
-    public boolean ExiteTil(String ps, String mdp){
-        boolean hasacc=false;
-         try {
-             Class.forName("com.mysql.cj.jdbc.Driver");
-             Connection c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
-            Statement requeteStatique = c.createStatement();
-             ResultSet tableResultat = requeteStatique.executeQuery("SELECT pseudo, mdp FROM user");
-            if (!tableResultat.next())
-                System.out.println("aucun user");
-            else do {
-                if(tableResultat.getString("pseudo").equals(ps) && tableResultat.getString("mdp").equals(mdp))
-                    hasacc = true;
-            }
 
-            while (tableResultat.next());
-             c.close();
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return hasacc;
-
-    }
     public void destroy() {
     }
 }
