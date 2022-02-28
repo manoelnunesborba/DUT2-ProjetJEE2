@@ -27,14 +27,8 @@ public class ServletAutentification extends HttpServlet {
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // response.setContentType("text/html");
 
-        // Hello
-        //PrintWriter out = response.getWriter();
-        //out.println("<html><body>");
-        // if(MD.getUser(request.getParameter("fname"),request.getParameter("fmdp"))!=null){
         if(mdt.getUser(request.getParameter("fname"),request.getParameter("fmdp")) !=null){
-            //response.sendRedirect("http://localhost:8080/Projet_JEE_war/Home.jsp");
             response.sendRedirect("Home.jsp");
         }
         //out.println("</body></html>");
