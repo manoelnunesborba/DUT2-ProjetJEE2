@@ -12,5 +12,16 @@
 </head>
 <body>
 <h1>Ajouter des livres</h1>
+<form action="addLivre" method="POST">
+    <label for="titre">Titre:</label>
+    <input type="text" id="titre" name="titre">
+    <label for="desc">Description</label>
+    <input type="desc" id="desc" name="desc">
+    <label for="aut">Auteur:</label>
+    <input type="aut" id="aut" name="aut">
+    <label for="option">Option</label>
+    <input type="option" id="option" name="option">
+    <input type="submit" value="Submit">
+</form>
 </body>
 </html>

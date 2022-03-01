@@ -4,6 +4,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import mediatek2022.*;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 // classe mono-instance  dont l'unique instance est connue de la m�diatheque
 // via une auto-d�claration dans son bloc static
@@ -40,12 +42,15 @@ public class MediathequeData implements PersistentMediatheque {
 			if (!tableResultat.next())
 				System.out.println("Aucun document");
 			else do {
-				Utilisateur usr= null;
-				if(tableResultat.getInt("idDoc")>0){
-					usr = getUser(tableResultat.getInt("idDoc"));
+				if(tableResultat.getInt("idUser")<0){
+					Utilisateur usr= null;
+					if(tableResultat.getInt("idDoc")>0){
+						usr = getUser(tableResultat.getInt("idDoc"));
+					}
+
+					dispo.add(new Document(tableResultat.getInt("idDoc"), tableResultat.getString("Titre"), tableResultat.getString("Description"), tableResultat.getString("Auteur"), usr, tableResultat.getString("options")));
 				}
 
-				dispo.add(new Document(tableResultat.getInt("idDoc"), tableResultat.getString("Titre"), tableResultat.getString("Description"), tableResultat.getString("Auteur"), usr, tableResultat.getString("options")));
 			}
 
 			while (tableResultat.next());
@@ -53,11 +58,6 @@ public class MediathequeData implements PersistentMediatheque {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
-
-
-
-
 		return dispo;
 	}
 	private Utilisateur getUser(int id){
@@ -119,14 +119,53 @@ public class MediathequeData implements PersistentMediatheque {
 	@Override
 	public Document getDocument(int numDocument) {
 
-		return null;
+		Document doc = null;
+		try {
+			this.c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
+
+			Statement requeteStatique = c.createStatement();
+			ResultSet tableResultat = requeteStatique.executeQuery("SELECT * FROM document WHERE idDoc= " + numDocument);
+			if (!tableResultat.next())
+				System.out.println("Aucun document");
+			else{
+				Utilisateur usr= null;
+				if(tableResultat.getInt("idDoc")>0){
+					usr = getUser(tableResultat.getInt("idDoc"));
+				}
+				doc = new Document(tableResultat.getInt("idDoc"), tableResultat.getString("Titre"), tableResultat.getString("Description"), tableResultat.getString("Auteur"), usr, tableResultat.getString("options"));
+			}
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return doc;
 	}
 
 	@Override
 	public void ajoutDocument(int type, Object... args) {
-		// args[0] -> le titre
-		// args [1] --> l'auteur
-		// etc... variable suivant le type de document
+		JSONObject jo = new JSONObject();
+		for (int i = 3; i < args.length; i++) {
+			String op = "option" + (3-i);
+			try {
+				jo.put(op,args[i]);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+		try {
+			this.c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
+
+			String requette = "INSERT INTO `document`(`Titre`, `Description`, `Auteur`, `idUser`, `options`) VALUES ( '" + args[0] + "','" + args[1] + "','" + args[2] + "',-1 , '" +  jo + "' )";
+			System.out.println(requette);
+			Statement st = c.createStatement();
+			st.executeUpdate(requette);
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+
+
 	}
 
 }

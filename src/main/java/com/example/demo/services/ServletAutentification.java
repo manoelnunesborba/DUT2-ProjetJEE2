@@ -30,6 +30,8 @@ public class ServletAutentification extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Utilisateur usr = mdt.getUser(request.getParameter("fname"),request.getParameter("fmdp"));
         if( usr !=null){
+            HttpSession session=request.getSession();
+            session.setAttribute("user",usr);
             if ((usr.isBibliothecaire())) {
                 response.sendRedirect("blibli.jsp");
             } else {

@@ -12,7 +12,9 @@ public class User implements Utilisateur {
         this.nom = nom;
         this.estBlibli = estBlibli;
     }
-
+    public int getId(){
+        return this.id;
+    }
     @Override
     public String name() {
         return this.nom;
