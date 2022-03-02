@@ -143,10 +143,11 @@ public class MediathequeData implements PersistentMediatheque {
 	@Override
 	public void ajoutDocument(int type, Object... args) {
 		JSONObject jo = new JSONObject();
-		for (int i = 3; i < args.length; i++) {
-			String op = "option" + (3-i);
+		Object[] options = (Object[]) args[3];
+		for (int i = 0; i < options.length; i++) {
+			String op = "option" + i;
 			try {
-				jo.put(op,args[i]);
+				jo.put(op,options[i].toString());
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}

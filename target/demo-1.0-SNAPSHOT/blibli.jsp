@@ -19,8 +19,27 @@
     <input type="desc" id="desc" name="desc">
     <label for="aut">Auteur:</label>
     <input type="aut" id="aut" name="aut">
-    <label for="option">Option</label>
-    <input type="option" id="option" name="option">
+
+<%
+    int nbOpt;
+    try{
+        nbOpt = Integer.parseInt(request.getParameter("opt"));
+        if(nbOpt <= 1){
+            throw new NumberFormatException();
+        }
+    }catch (NumberFormatException e){
+        nbOpt=1;
+    };
+    for (int i = 0; i < nbOpt; i++) {
+        out.print("<label for='option" + i +"'>Option</label>");
+        out.print("<input id='option" + i + "' name='option" + i+"'>");
+    }
+    out.print("<input style='display:none;' name='qte' id='qte' type=' number' value=" + nbOpt + ">");
+    out.print("<a href='./blibli.jsp?opt=" +  (nbOpt+1) + "'>Ajouter option</a>");
+    out.print("<a href='./blibli.jsp?opt=" +  (nbOpt-1) + "'>Suprimer dernière option</a>");
+
+
+%>
     <input type="submit" value="Submit">
 </form>
 </body>

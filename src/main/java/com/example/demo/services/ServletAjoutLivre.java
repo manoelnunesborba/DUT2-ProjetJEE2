@@ -24,8 +24,23 @@ public class ServletAjoutLivre extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if(req.getParameter("titre")!=null && req.getParameter("desc")!=null && req.getParameter("aut")!=null && req.getParameter("option")!=null){
-            mdt.ajoutDocument(0,req.getParameter("titre"),req.getParameter("desc"),req.getParameter("aut"),req.getParameter("option"));
+
+        if(req.getParameter("titre")!=null && req.getParameter("desc")!=null && req.getParameter("aut")!=null && req.getParameter("qte")!=null){
+            int nbOpt;
+            try{
+                nbOpt = Integer.parseInt(req.getParameter("qte"));
+                if(nbOpt <= 1){
+                    throw new NumberFormatException();
+                }
+            }catch (NumberFormatException e){
+                nbOpt=1;
+            };
+            Object[] options = new Object[nbOpt];
+            for (int i = 0; i < nbOpt; i++) {
+                options[i] = req.getParameter("option" + i);
+                System.out.println(req.getParameter("option" + i));
+            }
+            mdt.ajoutDocument(0,req.getParameter("titre"),req.getParameter("desc"),req.getParameter("aut"),options);
             resp.sendRedirect("blibli.jsp");
         }
     }
