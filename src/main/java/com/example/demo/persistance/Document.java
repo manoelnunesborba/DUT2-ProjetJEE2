@@ -58,8 +58,20 @@ public class Document implements mediatek2022.Document {
     @Override
     public void retour() {
         user=null;
+        try {
+            Connection c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
+            String requette = "UPDATE document SET idUser= -1 WHERE idDoc = " + this.getId();
+            System.out.println(requette);
+            Statement st = c.createStatement();
+            st.executeUpdate(requette);
+            c.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
-
+    public User getUserLocationCours(){
+        return this.user;
+    }
     @Override
     public String toString() {
         return "Titre: '" + Titre +

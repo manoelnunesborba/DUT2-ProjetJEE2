@@ -27,7 +27,6 @@ public class MediathequeData implements PersistentMediatheque {
 
 	private MediathequeData() {
 
-
 	}
 
 	// renvoie la liste de tous les documents disponibles de la m�diath�que
@@ -42,14 +41,14 @@ public class MediathequeData implements PersistentMediatheque {
 			if (!tableResultat.next())
 				System.out.println("Aucun document");
 			else do {
-				if(tableResultat.getInt("idUser")<0){
+
 					Utilisateur usr= null;
-					if(tableResultat.getInt("idDoc")>0){
-						usr = getUser(tableResultat.getInt("idDoc"));
+					if(tableResultat.getInt("idUser")>=0){
+						usr = getUser(tableResultat.getInt("idUser"));
 					}
 
 					dispo.add(new Document(tableResultat.getInt("idDoc"), tableResultat.getString("Titre"), tableResultat.getString("Description"), tableResultat.getString("Auteur"), usr, tableResultat.getString("options")));
-				}
+
 
 			}
 
@@ -60,23 +59,23 @@ public class MediathequeData implements PersistentMediatheque {
 		}
 		return dispo;
 	}
-	private Utilisateur getUser(int id){
+	public Utilisateur getUser(int id){
 		User ts = null;
-		if(id>0){
+		if(id>=0){
 			boolean hasacc=false;
 			try {
 				this.c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
 
 				Statement requeteStatique = c.createStatement();
-				String querry ="SELECT * FROM utilisateur WHERE = " + String.valueOf(id);
-				ResultSet tableResultat = requeteStatique.executeQuery("SELECT * FROM utilisateur");
+				String querry ="SELECT * FROM utilisateur WHERE idUser=" + String.valueOf(id);
+				ResultSet tableResultat = requeteStatique.executeQuery(querry);
 				if (!tableResultat.next())
 					System.out.println("aucun user");
-				else do {
+				else{
 					ts = new User(tableResultat.getInt("idUser"), tableResultat.getString("pseudo"), tableResultat.getBoolean("estBlibli"));
 				}
 
-				while (tableResultat.next());
+
 				c.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
