@@ -33,7 +33,7 @@ public class User implements Utilisateur {
         synchronized (this){
             ArrayList<Document> livresUser = new ArrayList<>();
             try {
-                Connection c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
+                Connection c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","root");
                 PreparedStatement stmt = c.prepareStatement("SELECT * FROM document WHERE idUser = ?");
                 stmt.setInt(1, this.id);
                 ResultSet tableResultat = stmt.executeQuery();

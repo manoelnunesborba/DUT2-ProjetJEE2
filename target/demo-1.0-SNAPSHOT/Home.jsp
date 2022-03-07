@@ -21,9 +21,9 @@
         </div>
 
         <div class="row text-justify">
-            <a href="Home.jsp?mode=voir" class="btn btn-outline-secondary col-3">Voir tous les livres disponibles</a>
-            <a href="Home.jsp?mode=rendre" type="" class="btn btn-outline-secondary col-3">Rendre un livre</a>
-            <a href="./deco" class="btn btn-outline-danger col-3">Se déconnecter</a>
+            <a href="Home.jsp?mode=voir" class="btn btn-outline-secondary col-4">Voir tous les livres disponibles</a>
+            <a href="Home.jsp?mode=rendre" type="" class="btn btn-outline-secondary col-4">Rendre un livre</a>
+            <a href="./deco" class="btn btn-outline-danger col-4">Se déconnecter</a>
         </div>
 
         <div class="row">
