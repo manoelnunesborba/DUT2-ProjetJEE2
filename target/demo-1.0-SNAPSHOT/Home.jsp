@@ -6,6 +6,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <link rel="stylesheet" href="./styleHome.css">
     <title>Home</title>
 </head>
 <body>
@@ -46,5 +47,6 @@
 
 
 %>
+<a href="./deco">Se deconnecter</a>
 </body>
 </html>

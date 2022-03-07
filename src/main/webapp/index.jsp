@@ -2,12 +2,14 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" href="./style.css">
     <title>JSP - Hello World</title>
 </head>
 <body>
-<h1><%= "Se connecter!" %></h1>
+
 <br/>
 <form action="auth" method="POST">
+    <h1><%= "Se connecter!" %></h1>
     <label for="fname">Nom</label><br>
     <input name="fname" type="text" id="fname" value=""><br><br>
     <label for="lmdp">Mot de passe:</label><br>

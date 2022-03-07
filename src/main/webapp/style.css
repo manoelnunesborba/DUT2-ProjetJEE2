@@ -1,0 +1,8 @@
+body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+a{
+    padding-left: 10px;
+}
