@@ -40,7 +40,7 @@ public class User implements Utilisateur {
                 if (!tableResultat.next())
                 System.out.println("Aucun document");
 				else do {
-                    livresUser.add(new Document(tableResultat.getInt("idDoc"), tableResultat.getString("Titre"), tableResultat.getString("Description"), tableResultat.getString("Auteur"), this, tableResultat.getString("options")));
+                    livresUser.add(new Document(tableResultat.getInt("idDoc"), tableResultat.getString("Titre"), Integer.parseInt(tableResultat.getString("type")), tableResultat.getString("Description"), tableResultat.getString("Auteur"), this, tableResultat.getString("options")));
                 }while (tableResultat.next());
                 c.close();
             } catch (SQLException e) {

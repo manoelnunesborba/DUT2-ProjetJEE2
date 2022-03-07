@@ -49,7 +49,7 @@ public class MediathequeData implements PersistentMediatheque {
 						usr = getUser(tableResultat.getInt("idUser"));
 					}
 
-					dispo.add(new Document(tableResultat.getInt("idDoc"), tableResultat.getString("Titre"), tableResultat.getString("Description"), tableResultat.getString("Auteur"), usr, tableResultat.getString("options")));
+					dispo.add(new Document(tableResultat.getInt("idDoc"), tableResultat.getString("Titre"), Integer.parseInt(tableResultat.getString("type")), tableResultat.getString("Description"), tableResultat.getString("Auteur"), usr, tableResultat.getString("options")));
 
 
 				}
@@ -141,7 +141,7 @@ public class MediathequeData implements PersistentMediatheque {
 					if(tableResultat.getInt("idDoc")>0){
 						usr = getUser(tableResultat.getInt("idDoc"));
 					}
-					doc = new Document(tableResultat.getInt("idDoc"), tableResultat.getString("Titre"), tableResultat.getString("Description"), tableResultat.getString("Auteur"), usr, tableResultat.getString("options"));
+					doc = new Document(tableResultat.getInt("idDoc"), tableResultat.getString("Titre"), Integer.parseInt(tableResultat.getString("type")), tableResultat.getString("Description"), tableResultat.getString("Auteur"), usr, tableResultat.getString("options"));
 				}
 				c.close();
 			} catch (SQLException e) {

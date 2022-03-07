@@ -7,28 +7,32 @@ import java.sql.*;
 public class Document implements mediatek2022.Document {
     private int id;
     private String Titre;
+    private int type;
     private String Descr;
     private String auteur;
-    private User user;
+    private Utilisateur user;
     private String options;
 
-    public Document(int id, String titre, String descr, String auteur, Utilisateur user, String options) {
-        this.id = id;
+    public Document(String titre, int type, String descr, String auteur, Utilisateur user, String options) {
         Titre = titre;
+        this.type = type;
         Descr = descr;
         this.auteur = auteur;
-        this.user = (User) user;
+        this.user = user;
         this.options = options;
     }
 
-    public Document(String titre, String descr, String auteur, Utilisateur user, String options) {
+    public Document(int id, String titre, int type, String descr, String auteur, Utilisateur user, String options) {
+        this.id = id;
         Titre = titre;
+        this.type = type;
         Descr = descr;
         this.auteur = auteur;
-        this.user = (User) user;
+        this.user = user;
         this.options = options;
     }
-    public int getId(){
+
+    private int getId(){
         return this.id;
     }
     @Override
@@ -39,11 +43,12 @@ public class Document implements mediatek2022.Document {
     @Override
     public void emprunt(Utilisateur utilisateur) throws Exception {
         synchronized (this){
-            this.user = (User) utilisateur;
+            this.user = utilisateur;
+            User tmp = (User) this.user;
             try {
                 Connection c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
                 PreparedStatement stmt = c.prepareStatement("UPDATE document SET idUser= ? WHERE idDoc = ?");
-                stmt.setInt(1,this.user.getId());
+                stmt.setInt(1,tmp.getId());
                 stmt.setInt(2,this.getId());
                 stmt.executeUpdate();
                 c.close();
@@ -70,14 +75,15 @@ public class Document implements mediatek2022.Document {
             }
         }
     }
-    public User getUserLocationCours(){
-        return this.user;
-    }
+
     @Override
     public String toString() {
-        return "Titre: '" + Titre +
-                ", Description: '" + Descr +
-                ", auteur: '" + auteur +
-                ", options: '" + options;
+        return ", Titre='" + Titre + '\'' +
+                ", type=" + type +
+                ", Descr='" + Descr + '\'' +
+                ", auteur='" + auteur + '\'' +
+                ", user=" + user +
+                ", options='" + options + '\'' +
+                '}';
     }
 }
