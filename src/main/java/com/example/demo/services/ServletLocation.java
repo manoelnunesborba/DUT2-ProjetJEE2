@@ -1,7 +1,7 @@
 package com.example.demo.services;
 
-import com.example.demo.persistance.Document;
 import com.example.demo.persistance.MediathequeData;
+import mediatek2022.Document;
 import mediatek2022.Mediatheque;
 import mediatek2022.Utilisateur;
 
@@ -31,8 +31,8 @@ public class ServletLocation extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Utilisateur user  = (Utilisateur)req.getSession().getAttribute("user");
         int n = Integer.parseInt(req.getParameter("num"));
-        Document doc = (Document) mdt.getDocument(n);
-        resp.getOutputStream().print("Vous souhaitez louer le document " + doc);
+        Document doc= (Document) req.getSession().getAttribute(String.valueOf(n));
+        System.out.println(doc);
         try {
             doc.emprunt(user);
             resp.sendRedirect("Home.jsp");

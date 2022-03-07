@@ -2,7 +2,7 @@
 <%@ page import="mediatek2022.Document" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.demo.persistance.MediathequeData" %>
-<%@ page import="com.example.demo.persistance.User" %>
+<%@ page import="mediatek2022.Utilisateur" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -21,23 +21,23 @@
         if(param!= null && param.equals("voir")){
             out.println("voir");
             for (int i = 0; i < doc.size(); i++) {
-                com.example.demo.persistance.Document test = (com.example.demo.persistance.Document) doc.get(i);
 
                 if(doc.get(i).disponible()){
                     out.print("<p></p>");
                     out.print(doc.get(i));
-                    out.println("<a href='./location?num=" +  test.getId() + "'>Louez moi</a>");
+                    request.getSession().setAttribute(String.valueOf(i), doc.get(i));
+                    out.println("<a href='./location?num=" +  i + "'>Louez moi</a>");
                 }
             }
         }else if(param!= null && param.equals("rendre")) {
-            for (int i = 0; i < doc.size(); i++) {
-                com.example.demo.persistance.Document test = (com.example.demo.persistance.Document) doc.get(i);
-                User aa = (User)session.getAttribute("user");
-                if( test.getUserLocationCours()!=null && test.getUserLocationCours().getId()  == aa.getId()){
+            Utilisateur user = (Utilisateur)request.getSession().getAttribute("user");
+            for (int i = 0; i < user.data().length; i++) {
+                    Document docu = (Document) user.data()[i];
                     out.print("<p></p>");
-                    out.print(doc.get(i));
-                    out.println("<a href='./retour?num=" +  test.getId() + "'>retourner</a>");
-                }
+                    out.print(docu);
+                    request.getSession().setAttribute(String.valueOf(i), docu);
+                    out.println("<a href='./retour?num=" +  i + "'>retourner</a>");
+
             }
 
         }

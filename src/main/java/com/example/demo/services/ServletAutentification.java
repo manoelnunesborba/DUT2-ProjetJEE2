@@ -5,8 +5,6 @@ import mediatek2022.Mediatheque;
 import mediatek2022.Utilisateur;
 
 import java.io.*;
-import java.sql.*;
-import javax.inject.Inject;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 
