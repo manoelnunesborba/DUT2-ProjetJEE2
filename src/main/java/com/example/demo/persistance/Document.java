@@ -46,7 +46,7 @@ public class Document implements mediatek2022.Document {
             this.user = utilisateur;
             User tmp = (User) this.user;
             try {
-                Connection c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
+                Connection c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","root");
                 PreparedStatement stmt = c.prepareStatement("UPDATE document SET idUser= ? WHERE idDoc = ?");
                 stmt.setInt(1,tmp.getId());
                 stmt.setInt(2,this.getId());
@@ -63,7 +63,7 @@ public class Document implements mediatek2022.Document {
         synchronized (this){
             user=null;
             try {
-                Connection c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
+                Connection c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","root");
                 PreparedStatement stmt = c.prepareStatement("UPDATE document SET idUser= ? WHERE idDoc = ?");
                 stmt.setInt(1,-1);
                 stmt.setInt(2,this.getId());
@@ -78,12 +78,18 @@ public class Document implements mediatek2022.Document {
 
     @Override
     public String toString() {
-        return ", Titre='" + Titre + '\'' +
-                ", type=" + type +
-                ", Descr='" + Descr + '\'' +
-                ", auteur='" + auteur + '\'' +
-                ", user=" + user +
-                ", options='" + options + '\'' +
-                '}';
+        String type;
+
+        if(this.type==0){
+            type="Livre";
+        }else{
+            type="DVD";
+        }
+        return "<td>" + Titre + "</td>" +
+                "<td>" + type + "</td>" +
+                "<td>" + Descr + "</td>" +
+                "<td>" + auteur + "</td>" +
+                "<td>" + user + "</td>" +
+                "<td>" + options + "</td>";
     }
 }
