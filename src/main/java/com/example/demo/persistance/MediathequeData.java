@@ -62,31 +62,34 @@ public class MediathequeData implements PersistentMediatheque {
 		}
 
 	}
+	//Pas besoin de syncro car elle est deja utiisé dans une fonction syncro
 	private Utilisateur getUser(int id){
-		User ts = null;
-		if(id>=0){
-			boolean hasacc=false;
-			try {
-				this.c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
+			User ts = null;
+			if(id>=0){
+				boolean hasacc=false;
+				try {
+					this.c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
 
-				PreparedStatement stmt = c.prepareStatement("SELECT * FROM utilisateur WHERE idUser=?");
-				stmt.setInt(1, id);
-				ResultSet tableResultat = stmt.executeQuery();
-				if (!tableResultat.next())
-					System.out.println("aucun user");
-				else{
-					ts = new User(tableResultat.getInt("idUser"), tableResultat.getString("pseudo"), tableResultat.getBoolean("estBlibli"));
+					PreparedStatement stmt = c.prepareStatement("SELECT * FROM utilisateur WHERE idUser=?");
+					stmt.setInt(1, id);
+					ResultSet tableResultat = stmt.executeQuery();
+					if (!tableResultat.next())
+						System.out.println("aucun user");
+					else{
+						ts = new User(tableResultat.getInt("idUser"), tableResultat.getString("pseudo"), tableResultat.getBoolean("estBlibli"));
+					}
+
+
+					c.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
 				}
-
-
-				c.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
 			}
-		}
 
 
-		return ts;
+			return ts;
+
+
 	}
 	// va r�cup�rer le User dans la BD et le renvoie
 	// si pas trouv�, renvoie null

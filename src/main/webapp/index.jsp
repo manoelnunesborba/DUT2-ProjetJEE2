@@ -5,8 +5,7 @@
     <title>JSP - Hello World</title>
 </head>
 <body>
-<h1><%= "Se connecter!" %>
-</h1>
+<h1><%= "Se connecter!" %></h1>
 <br/>
 <form action="auth" method="POST">
     <label for="fname">Nom</label><br>

@@ -38,7 +38,6 @@ public class ServletAutentification extends HttpServlet {
                 response.sendRedirect("Home.jsp");
             }
         }
-        //out.println("</body></html>");
     }
 
     public void destroy() {

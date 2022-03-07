@@ -1,4 +1,4 @@
-<%--
+<%@ page import="mediatek2022.Utilisateur" %><%--
   Created by IntelliJ IDEA.
   User: papaj
   Date: 28/02/2022
@@ -21,23 +21,30 @@
     <input type="aut" id="aut" name="aut">
 
 <%
-    int nbOpt;
     try{
-        nbOpt = Integer.parseInt(request.getParameter("opt"));
-        if(nbOpt <= 1){
-            throw new NumberFormatException();
+        Utilisateur user= (Utilisateur) request.getSession().getAttribute("user");
+        user.isBibliothecaire();  // Juste pour soulever l'execption s'iln'est pas connecté
+        int nbOpt;
+        try{
+            nbOpt = Integer.parseInt(request.getParameter("opt"));
+            if(nbOpt <= 1){
+                throw new NumberFormatException();
+            }
+        }catch (NumberFormatException e){
+            nbOpt=1;
+        };
+        for (int i = 0; i < nbOpt; i++) {
+            out.print("<label for='option" + i +"'>Option</label>");
+            out.print("<input id='option" + i + "' name='option" + i+"'>");
         }
-    }catch (NumberFormatException e){
-        nbOpt=1;
-    };
-    for (int i = 0; i < nbOpt; i++) {
-        out.print("<label for='option" + i +"'>Option</label>");
-        out.print("<input id='option" + i + "' name='option" + i+"'>");
-    }
-    out.print("<input style='display:none;' name='qte' id='qte' type=' number' value=" + nbOpt + ">");
-    out.print("<a href='./blibli.jsp?opt=" +  (nbOpt+1) + "'>Ajouter option</a>");
-    out.print("<a href='./blibli.jsp?opt=" +  (nbOpt-1) + "'>Suprimer dernière option</a>");
+        out.print("<input style='display:none;' name='qte' id='qte' type=' number' value=" + nbOpt + ">");
+        out.print("<a href='./blibli.jsp?opt=" +  (nbOpt+1) + "'>Ajouter option</a>");
+        out.print("<a href='./blibli.jsp?opt=" +  (nbOpt-1) + "'>Suprimer dernière option</a>");
 
+
+    }catch(NullPointerException e){
+        response.sendRedirect("./index.jsp");
+    }
 
 %>
     <input type="submit" value="Submit">
