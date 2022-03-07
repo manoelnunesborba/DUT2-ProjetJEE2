@@ -19,7 +19,8 @@ public class MediathequeData implements PersistentMediatheque {
 	static {
 		Mediatheque.getInstance().setData(new MediathequeData());
 	try {
-		Class.forName("com.mysql.cj.jdbc.Driver");
+		//Class.forName("com.mysql.cj.jdbc.Driver");
+		Class.forName("com.mysql.jdbc.Driver");
 	} catch (ClassNotFoundException e) {
 		e.printStackTrace();
 	}
