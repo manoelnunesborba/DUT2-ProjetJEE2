@@ -15,20 +15,20 @@
 
     <div class="row mt-5">
 
-      <form class="form-vertical col-10 col-lg-6 col-xl-4 mx-auto border rounded mt-5" action="addLivre" method="post" enctype="multipart/form-data">
+      <form class="form-vertical col-10 col-lg-6 col-xl-4 mx-auto border rounded mt-5" action="addLivre" method="post">
         <fieldset>
           <legend class="font-weight-bold mt-3">Nouveau document</legend>
 
           <div class="form-group">
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="livre" id="livre" value="0" checked>
+                <input class="form-check-input" type="radio" name="type" id="livre" value="0" checked>
                 <label class="form-check-label" for="livre">
                     Livre
                 </label>
             </div>
 
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="CD" id="CD" value="1">
+                <input class="form-check-input" type="radio" name="type" id="CD" value="1">
                 <label class="form-check-label" for="CD">
                     CD
                 </label>

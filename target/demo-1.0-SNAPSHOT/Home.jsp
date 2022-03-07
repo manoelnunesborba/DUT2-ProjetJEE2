@@ -2,7 +2,6 @@
 <%@ page import="mediatek2022.Document" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.demo.persistance.MediathequeData" %>
-<%@ page import="com.example.demo.persistance.User" %>
 <%@ page import="mediatek2022.Utilisateur" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
