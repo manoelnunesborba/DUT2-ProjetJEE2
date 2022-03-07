@@ -32,8 +32,6 @@
 					<input type="submit" class="btn btn-lg btn-primary btn-block" value="Se connecter" />
 				</div>
 
-				<a href="./index.php?controle=utilisateur&action=ajoutUtilisateur">S'inscrire</a>
-
 			</form>
 
 		</div>
