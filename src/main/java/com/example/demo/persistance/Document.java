@@ -41,7 +41,7 @@ public class Document implements mediatek2022.Document {
         synchronized (this){
             this.user = (User) utilisateur;
             try {
-                Connection c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
+                Connection c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","root");
                 PreparedStatement stmt = c.prepareStatement("UPDATE document SET idUser= ? WHERE idDoc = ?");
                 stmt.setInt(1,this.user.getId());
                 stmt.setInt(2,this.getId());
@@ -58,7 +58,7 @@ public class Document implements mediatek2022.Document {
         synchronized (this){
             user=null;
             try {
-                Connection c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
+                Connection c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","root");
                 PreparedStatement stmt = c.prepareStatement("UPDATE document SET idUser= ? WHERE idDoc = ?");
                 stmt.setInt(1,-1);
                 stmt.setInt(2,this.getId());
