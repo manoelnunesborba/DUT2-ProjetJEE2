@@ -40,7 +40,7 @@ public class ServletAjoutLivre extends HttpServlet {
                 options[i] = req.getParameter("option" + i);
                 System.out.println(req.getParameter("option" + i));
             }
-            mdt.ajoutDocument(0,req.getParameter("titre"),req.getParameter("desc"),req.getParameter("aut"),options);
+            mdt.ajoutDocument(0,req.getParameter("type"),req.getParameter("titre"),req.getParameter("desc"),req.getParameter("aut"),options);
             resp.sendRedirect("blibli.jsp");
         }
     }
