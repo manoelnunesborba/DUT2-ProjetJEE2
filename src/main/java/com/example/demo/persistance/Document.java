@@ -2,10 +2,7 @@ package com.example.demo.persistance;
 
 import mediatek2022.Utilisateur;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class Document implements mediatek2022.Document {
     private int id;
@@ -41,32 +38,36 @@ public class Document implements mediatek2022.Document {
 
     @Override
     public void emprunt(Utilisateur utilisateur) throws Exception {
-        this.user = (User) utilisateur;
-        try {
-            Connection c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
-            String requette = "UPDATE document SET idUser= " + this.user.getId() + " WHERE idDoc = " + this.getId();
-            System.out.println(requette);
-            Statement st = c.createStatement();
-            st.executeUpdate(requette);
-            c.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        synchronized (this){
+            this.user = (User) utilisateur;
+            try {
+                Connection c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
+                PreparedStatement stmt = c.prepareStatement("UPDATE document SET idUser= ? WHERE idDoc = ?");
+                stmt.setInt(1,this.user.getId());
+                stmt.setInt(2,this.getId());
+                stmt.executeUpdate();
+                c.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-
     }
 
     @Override
     public void retour() {
-        user=null;
-        try {
-            Connection c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
-            String requette = "UPDATE document SET idUser= -1 WHERE idDoc = " + this.getId();
-            System.out.println(requette);
-            Statement st = c.createStatement();
-            st.executeUpdate(requette);
-            c.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        synchronized (this){
+            user=null;
+            try {
+                Connection c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
+                PreparedStatement stmt = c.prepareStatement("UPDATE document SET idUser= ? WHERE idDoc = ?");
+                stmt.setInt(1,-1);
+                stmt.setInt(2,this.getId());
+                stmt.executeUpdate();
+                c.close();
+                this.user=null;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
     public User getUserLocationCours(){

@@ -32,15 +32,16 @@ public class MediathequeData implements PersistentMediatheque {
 	// renvoie la liste de tous les documents disponibles de la m�diath�que
 	@Override
 	public List<mediatek2022.Document> tousLesDocumentsDisponibles() {
-		ArrayList<mediatek2022.Document> dispo = new ArrayList<>();
-		try {
-			this.c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
+		synchronized (this){
+			ArrayList<mediatek2022.Document> dispo = new ArrayList<>();
+			try {
+				this.c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
 
-			Statement requeteStatique = c.createStatement();
-			ResultSet tableResultat = requeteStatique.executeQuery("SELECT * FROM document");
-			if (!tableResultat.next())
-				System.out.println("Aucun document");
-			else do {
+				PreparedStatement stmt = c.prepareStatement("SELECT * FROM document");
+				ResultSet tableResultat = stmt.executeQuery();
+				if (!tableResultat.next())
+					System.out.println("Aucun document");
+				else do {
 
 					Utilisateur usr= null;
 					if(tableResultat.getInt("idUser")>=0){
@@ -50,25 +51,27 @@ public class MediathequeData implements PersistentMediatheque {
 					dispo.add(new Document(tableResultat.getInt("idDoc"), tableResultat.getString("Titre"), tableResultat.getString("Description"), tableResultat.getString("Auteur"), usr, tableResultat.getString("options")));
 
 
-			}
+				}
 
-			while (tableResultat.next());
-			c.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
+				while (tableResultat.next());
+				c.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return dispo;
 		}
-		return dispo;
+
 	}
-	public Utilisateur getUser(int id){
+	private Utilisateur getUser(int id){
 		User ts = null;
 		if(id>=0){
 			boolean hasacc=false;
 			try {
 				this.c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
 
-				Statement requeteStatique = c.createStatement();
-				String querry ="SELECT * FROM utilisateur WHERE idUser=" + String.valueOf(id);
-				ResultSet tableResultat = requeteStatique.executeQuery(querry);
+				PreparedStatement stmt = c.prepareStatement("SELECT * FROM utilisateur WHERE idUser=?");
+				stmt.setInt(1, id);
+				ResultSet tableResultat = stmt.executeQuery();
 				if (!tableResultat.next())
 					System.out.println("aucun user");
 				else{
@@ -89,27 +92,29 @@ public class MediathequeData implements PersistentMediatheque {
 	// si pas trouv�, renvoie null
 	@Override
 	public Utilisateur getUser(String login, String password) {
-		User ts = null;
-		boolean hasacc=false;
-		try {
-			this.c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
+		synchronized (this){
+			User ts = null;
+			boolean hasacc=false;
+			try {
+				this.c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
 
-			Statement requeteStatique = c.createStatement();
-			ResultSet tableResultat = requeteStatique.executeQuery("SELECT * FROM utilisateur");
-			if (!tableResultat.next())
-				System.out.println("aucun user");
-			else do {
-				if(tableResultat.getString("pseudo").equals(login) && tableResultat.getString("mdp").equals(password))
-					ts = new User(tableResultat.getInt("idUser"), login, tableResultat.getBoolean("estBlibli"));
+				//Statement requeteStatique = c.createStatement();
+				PreparedStatement stmt = c.prepareStatement("SELECT * FROM utilisateur");
+				ResultSet tableResultat = stmt.executeQuery();
+				if (!tableResultat.next())
+					System.out.println("aucun user");
+				else do {
+					if(tableResultat.getString("pseudo").equals(login) && tableResultat.getString("mdp").equals(password))
+						ts = new User(tableResultat.getInt("idUser"), login, tableResultat.getBoolean("estBlibli"));
+				}
+
+				while (tableResultat.next());
+				c.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
-
-			while (tableResultat.next());
-			c.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
+			return ts;
 		}
-		return ts;
-
 	}
 
 	// va r�cup�rer le document de num�ro numDocument dans la BD
@@ -117,53 +122,61 @@ public class MediathequeData implements PersistentMediatheque {
 	// si pas trouv�, renvoie null
 	@Override
 	public Document getDocument(int numDocument) {
+		synchronized (this){
+			Document doc = null;
+			try {
+				this.c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
 
-		Document doc = null;
-		try {
-			this.c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
-
-			Statement requeteStatique = c.createStatement();
-			ResultSet tableResultat = requeteStatique.executeQuery("SELECT * FROM document WHERE idDoc= " + numDocument);
-			if (!tableResultat.next())
-				System.out.println("Aucun document");
-			else{
-				Utilisateur usr= null;
-				if(tableResultat.getInt("idDoc")>0){
-					usr = getUser(tableResultat.getInt("idDoc"));
+				PreparedStatement stmt = c.prepareStatement("SELECT * FROM document WHERE idDoc= ?");
+				stmt.setInt(1, numDocument);
+				ResultSet tableResultat = stmt.executeQuery();
+				if (!tableResultat.next())
+					System.out.println("Aucun document");
+				else{
+					Utilisateur usr= null;
+					if(tableResultat.getInt("idDoc")>0){
+						usr = getUser(tableResultat.getInt("idDoc"));
+					}
+					doc = new Document(tableResultat.getInt("idDoc"), tableResultat.getString("Titre"), tableResultat.getString("Description"), tableResultat.getString("Auteur"), usr, tableResultat.getString("options"));
 				}
-				doc = new Document(tableResultat.getInt("idDoc"), tableResultat.getString("Titre"), tableResultat.getString("Description"), tableResultat.getString("Auteur"), usr, tableResultat.getString("options"));
+				c.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
-			c.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
+			return doc;
 		}
-		return doc;
+
 	}
 
 	@Override
 	public void ajoutDocument(int type, Object... args) {
-		JSONObject jo = new JSONObject();
-		Object[] options = (Object[]) args[3];
-		for (int i = 0; i < options.length; i++) {
-			String op = "option" + i;
+		synchronized (this){
+
+			JSONObject jo = new JSONObject();
+			Object[] options = (Object[]) args[3];
+			for (int i = 0; i < options.length; i++) {
+				String op = "option" + i;
+				try {
+					jo.put(op,options[i].toString());
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			}
 			try {
-				jo.put(op,options[i].toString());
-			} catch (JSONException e) {
+				this.c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
+				PreparedStatement stmt = c.prepareStatement("INSERT INTO `document`(`Titre`, `Description`, `Auteur`, `idUser`, `options`) VALUES ( ?,?,?,-1 ,? )");
+				stmt.setString(1, String.valueOf(args[0]));
+				stmt.setString(2, String.valueOf(args[1]));
+				stmt.setString(3, String.valueOf(args[2]));
+				stmt.setString(4, jo.toString());
+				stmt.executeUpdate();
+				c.close();
+			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		}
-		try {
-			this.c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
 
-			String requette = "INSERT INTO `document`(`Titre`, `Description`, `Auteur`, `idUser`, `options`) VALUES ( '" + args[0] + "','" + args[1] + "','" + args[2] + "',-1 , '" +  jo + "' )";
-			System.out.println(requette);
-			Statement st = c.createStatement();
-			st.executeUpdate(requette);
-			c.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 
+		}
 
 
 	}
