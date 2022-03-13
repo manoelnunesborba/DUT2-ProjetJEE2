@@ -4,6 +4,9 @@ import mediatek2022.Utilisateur;
 
 import java.sql.*;
 
+import static com.example.demo.persistance.MediathequeData.PASSWORD;
+import static com.example.demo.persistance.MediathequeData.USER;
+
 public class Document implements mediatek2022.Document {
     private int id;
     private String Titre;
@@ -46,7 +49,7 @@ public class Document implements mediatek2022.Document {
             this.user = utilisateur;
             User tmp = (User) this.user;
             try {
-                Connection c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
+                Connection c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,USER,PASSWORD);
                 PreparedStatement stmt = c.prepareStatement("UPDATE document SET idUser= ? WHERE idDoc = ?");
                 stmt.setInt(1,tmp.getId());
                 stmt.setInt(2,this.getId());
@@ -63,7 +66,7 @@ public class Document implements mediatek2022.Document {
         synchronized (this){
             user=null;
             try {
-                Connection c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
+                Connection c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,USER,PASSWORD);
                 PreparedStatement stmt = c.prepareStatement("UPDATE document SET idUser= ? WHERE idDoc = ?");
                 stmt.setInt(1,-1);
                 stmt.setInt(2,this.getId());

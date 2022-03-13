@@ -11,6 +11,8 @@ import org.json.JSONObject;
 // via une auto-d�claration dans son bloc static
 
 public class MediathequeData implements PersistentMediatheque {
+	public static final String USER = "root";
+	public static final String PASSWORD = "";
 	static Connection c;
 
 
@@ -36,7 +38,7 @@ public class MediathequeData implements PersistentMediatheque {
 		synchronized (this){
 			ArrayList<mediatek2022.Document> dispo = new ArrayList<>();
 			try {
-				this.c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
+				this.c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,USER,PASSWORD);
 
 				PreparedStatement stmt = c.prepareStatement("SELECT * FROM document");
 				ResultSet tableResultat = stmt.executeQuery();
@@ -69,7 +71,7 @@ public class MediathequeData implements PersistentMediatheque {
 			if(id>=0){
 				boolean hasacc=false;
 				try {
-					this.c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
+					this.c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" , USER,PASSWORD);
 
 					PreparedStatement stmt = c.prepareStatement("SELECT * FROM utilisateur WHERE idUser=?");
 					stmt.setInt(1, id);
@@ -100,7 +102,7 @@ public class MediathequeData implements PersistentMediatheque {
 			User ts = null;
 			boolean hasacc=false;
 			try {
-				this.c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
+				this.c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,USER,PASSWORD);
 
 				//Statement requeteStatique = c.createStatement();
 				PreparedStatement stmt = c.prepareStatement("SELECT * FROM utilisateur");
@@ -129,7 +131,7 @@ public class MediathequeData implements PersistentMediatheque {
 		synchronized (this){
 			Document doc = null;
 			try {
-				this.c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
+				this.c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,USER,PASSWORD);
 
 				PreparedStatement stmt = c.prepareStatement("SELECT * FROM document WHERE idDoc= ?");
 				stmt.setInt(1, numDocument);
@@ -167,7 +169,7 @@ public class MediathequeData implements PersistentMediatheque {
 				}
 			}
 			try {
-				this.c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
+				this.c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,USER,PASSWORD);
 				PreparedStatement stmt = c.prepareStatement("INSERT INTO `document`(`Titre`, `Type`, `Description`, `Auteur`, `idUser`, `options`) VALUES ( ?,?,?,?,-1 ,? )");
 				stmt.setString(1, String.valueOf(args[0]));
 				stmt.setInt(2, type);

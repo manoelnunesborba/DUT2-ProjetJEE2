@@ -5,6 +5,9 @@ import mediatek2022.Utilisateur;
 import java.sql.*;
 import java.util.ArrayList;
 
+import static com.example.demo.persistance.MediathequeData.PASSWORD;
+import static com.example.demo.persistance.MediathequeData.USER;
+
 public class User implements Utilisateur {
     private int id;
     private String nom;
@@ -33,7 +36,7 @@ public class User implements Utilisateur {
         synchronized (this){
             ArrayList<Document> livresUser = new ArrayList<>();
             try {
-                Connection c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,"root","");
+                Connection c = DriverManager.getConnection ("jdbc:mysql://localhost:3306/jee" ,USER,PASSWORD);
                 PreparedStatement stmt = c.prepareStatement("SELECT * FROM document WHERE idUser = ?");
                 stmt.setInt(1, this.id);
                 ResultSet tableResultat = stmt.executeQuery();
