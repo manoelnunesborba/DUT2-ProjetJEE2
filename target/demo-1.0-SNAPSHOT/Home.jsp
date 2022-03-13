@@ -34,6 +34,7 @@
                         <th scope="col">Titre</th>
                         <th scope="col">Type</th>
                         <th scope="col">Description</th>
+                        <th scope="col">Auteur</th>
                         <th scope="col">Options</th>
                         <th></th>
                     </tr>

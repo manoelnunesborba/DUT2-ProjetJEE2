@@ -33,7 +33,7 @@ public class ServletAutentification extends HttpServlet {
             if ((usr.isBibliothecaire())) {
                 response.sendRedirect("blibli.jsp");
             } else {
-                response.sendRedirect("Home.jsp");
+                response.sendRedirect("Home.jsp?mode=voir");
             }
         }
     }

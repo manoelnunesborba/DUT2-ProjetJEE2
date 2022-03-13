@@ -35,7 +35,7 @@ public class ServletLocation extends HttpServlet {
         System.out.println(doc);
         try {
             doc.emprunt(user);
-            resp.sendRedirect("Home.jsp");
+            resp.sendRedirect("Home.jsp?mode=voir");
         } catch (Exception e) {
             e.printStackTrace();
         }

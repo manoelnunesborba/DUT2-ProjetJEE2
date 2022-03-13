@@ -33,7 +33,7 @@ public class ServletRendreLivre extends HttpServlet {
         resp.getOutputStream().print("Vous souhaitez louer le document " + doc);
         try {
             doc.retour();
-            resp.sendRedirect("Home.jsp");
+            resp.sendRedirect("Home.jsp?mode=rendre");
         } catch (Exception e) {
             e.printStackTrace();
         }
